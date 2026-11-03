@@ -1,0 +1,51 @@
+---
+title: Documentação
+---
+
+import DocList, { ListItem } from '../components/DocsPage/List';
+import DocSummary from '../components/DocsPage/Summary';
+
+<div className="doc-main">
+	# Documentação
+
+	## Primeiros Passos
+	<DocSummary summary="Comece aqui para instalar o pacote e criar uma conexão com a base de dados em apenas alguns minutos." />
+
+	<DocList>
+		<ListItem title="Começar" link="/medoo-js/api/setup">
+			Instale o `medoo-js` e crie uma conexão com a base de dados.
+		</ListItem>
+	</DocList>
+	<br/>
+
+	## O Argumento `where`
+	<DocSummary summary="Muitos métodos usam este argumento para filtragem. Compreender é essencial para obter dados específicos." />
+
+	<DocList>
+		<ListItem title="Where" link="/medoo-js/api/syntax/where">
+			Documentação de referência para o argumento `where`.
+		</ListItem>
+	</DocList>
+	<br/>
+
+	## Todas as Referências de Documentação
+	<DocSummary summary="Procure a documentação completa para mais referências." />
+
+	<DocList>
+		<ListItem title="Select" link="/medoo-js/api/methods/select">
+			Buscar registro tabela.
+		</ListItem>
+		<ListItem title="Get" link="/medoo-js/api/methods/get">
+			Buscar um único registro tabela numa.
+		</ListItem>
+		<ListItem title="Insert" link="/medoo-js/api/methods/insert">
+			Inserir um ou mais novos registros numa tabela.
+		</ListItem>
+		<ListItem title="Update" link="/medoo-js/api/methods/update">
+			Atualizar registros tabela numa.
+		</ListItem>
+		<ListItem title="Delete" link="/medoo-js/api/methods/delete">
+			Deletar registros de uma tabela.
+		</ListItem>
+	</DocList>
+</div>

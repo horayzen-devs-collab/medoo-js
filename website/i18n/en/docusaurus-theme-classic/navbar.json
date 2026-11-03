@@ -1,0 +1,22 @@
+{
+  "title": {
+    "message": "MedooJS",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "MedooJS logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Primeiros Passos": {
+    "message": "Getting Started",
+    "description": "Navbar item with label Primeiros Passos"
+  },
+  "item.label.Documentação": {
+    "message": "Documentation",
+    "description": "Navbar item with label Documentação"
+  },
+  "item.label.Sobre": {
+    "message": "About",
+    "description": "Navbar item with label Sobre"
+  }
+}

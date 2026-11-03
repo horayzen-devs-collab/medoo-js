@@ -1,0 +1,10 @@
+{
+  "link.item.label.Ver no GitHub": {
+    "message": "Voir sur GitHub",
+    "description": "The label of footer link with label=Ver no GitHub linking to https://github.com/horayzen-developers/medoo-js"
+  },
+  "copyright": {
+    "message": "Le HORAYZEN Developers® Groupe, Tous droits réservés, 2026",
+    "description": "The footer copyright"
+  }
+}

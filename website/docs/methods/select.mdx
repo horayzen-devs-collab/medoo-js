@@ -1,0 +1,103 @@
+---
+title: API Select
+sidebar_label: select
+---
+
+import DocIntro from '../../src/components/DocsPage/Intro';
+import DocNote from '../../src/components/DocsPage/Note';
+import DocRet from '../../src/components/DocsPage/Ret';
+import DocSig from '../../src/components/DocsPage/Sig';
+import DocSummary from '../../src/components/DocsPage/Summary';
+
+<div className="doc-main">
+  # Select
+  <DocSummary summary="Obtém dados de uma tabela." />
+
+  ## Utilização
+
+  <DocSig content="select(table, columns)" />
+
+  <DocSig content="select(table, columns, where)" />
+
+  <DocSig content="select(table, join, columns, where)" />
+
+  ## Valor devolvido
+
+  <DocRet>
+    *`array[]`* Um array que contém os registos obtidos.
+  </DocRet>
+
+  <DocNote>
+    Podes utilizar `*` no parâmetro columns para obter todas as colunas. No entanto, recomenda-se que especifiques apenas as colunas necessárias para melhorar o desempenho e a legibilidade.
+  </DocNote>
+
+  ```js showLineNumbers
+  const data = database.select("users", [
+    "username",
+    "email"
+  ], {
+    "id[>]": 100
+  });
+
+  // Exemplo de resultado:
+  // [
+  //  {
+  //    username: "foo",
+  //    email: "foo@bar.com"
+  //  },
+  //  {
+  //    username: "cat",
+  //    email: "cat@dog.com"
+  //  }
+  // ]
+
+  for (const { username, email } of data) {
+      console.log(`User: ${username} - Email: ${email}`);
+  }
+
+  // Selecionar todas as colunas.
+  data = database.select("users", "*");
+
+  // Selecionar uma única coluna.
+  data = database.select("users", "username");
+
+  // Exemplo de resultado:
+  // ["joh", "doe"]
+  ```
+
+  ## Junções entre tabelas
+
+  <DocIntro>
+    As cláusulas SQL JOIN combinam registos de várias tabelas. O MedooJS disponibiliza uma sintaxe simples para construir cláusulas JOIN.
+  </DocIntro>
+
+  <div className="list">
+    * `>` - LEFT JOIN
+    * `<` - RIGHT JOIN
+    * `<>` - FULL JOIN
+    * `><` - INNER JOIN
+  </div>
+
+  ```js showLineNumbers
+  database.select("posts", {
+    // Define a relação entre a tabela principal e a tabela associada.
+    "[>]users": { "author_id": "id" }
+  });
+  ```
+
+  <DocIntro>
+    A coluna `author_id` da tabela `posts` é associada à coluna `id` da tabela `users`.
+  </DocIntro>
+
+  ```js showLineNumbers
+  "[>]users": { "author_id": "id" } // LEFT JOIN "users" ON "posts"."author_id" = "users"."id"
+  ```
+
+  <DocIntro>
+    Se ambas as tabelas utilizarem o mesmo nome de coluna, podes utilizar a forma abreviada.
+  </DocIntro>
+
+  ```js showLineNumbers
+  "[>]users": "user_id" // LEFT JOIN "users" USING ("user_id")
+  ```
+</div>

@@ -1,0 +1,42 @@
+---
+title: API Delete
+sidebar_label: delete
+---
+
+import DocIntro from '../../../../../src/components/DocsPage/Intro';
+import DocParams, { ParamsItem } from '../../../../../src/components/DocsPage/Params';
+import DocSig from '../../../../../src/components/DocsPage/Sig';
+import DocSummary from '../../../../../src/components/DocsPage/Summary';
+
+<div className="doc-main">
+  # Delete
+  <DocSummary summary="Supprime des enregistrements d'une table." />
+
+  <DocSig content="delete(table, where)" />
+
+  <DocParams>
+    <ParamsItem title="table [string]">
+      Le nom de la table.
+    </ParamsItem>
+
+    <ParamsItem title="where [object]">
+      La clause `WHERE` utilisée pour filtrer les enregistrements à supprimer.
+    </ParamsItem>
+  </DocParams>
+
+  ## Nombre de lignes affectées
+
+  <DocIntro>
+    Pour obtenir le nombre de lignes affectées, appelle `rowCount()` sur la valeur renvoyée par `delete`.
+  </DocIntro>
+
+  ```js showLineNumbers
+  const result = database.delete("users", {
+    type: "business",
+    "age[<]": 18
+  });
+
+// Renvoie le nombre de lignes affectées par la dernière instruction SQL.
+const rowCount = result.rowCount();
+  ```
+</div>

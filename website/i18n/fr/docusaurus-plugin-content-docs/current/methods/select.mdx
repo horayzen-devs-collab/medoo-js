@@ -1,0 +1,103 @@
+---
+title: API Select
+sidebar_label: select
+---
+
+import DocIntro from '../../../../../src/components/DocsPage/Intro';
+import DocNote from '../../../../../src/components/DocsPage/Note';
+import DocRet from '../../../../../src/components/DocsPage/Ret';
+import DocSig from '../../../../../src/components/DocsPage/Sig';
+import DocSummary from '../../../../../src/components/DocsPage/Summary';
+
+<div className="doc-main">
+  # Select
+  <DocSummary summary="Récupère des données d'une table." />
+
+  ## Utilisation
+
+  <DocSig content="select(table, columns)" />
+
+  <DocSig content="select(table, columns, where)" />
+
+  <DocSig content="select(table, join, columns, where)" />
+
+  ## Valeur de retour
+
+  <DocRet>
+    *`array[]`* Un tableau contenant les lignes récupérées.
+  </DocRet>
+
+  <DocNote>
+    Tu peux utiliser `*` pour le paramètre columns afin de récupérer toutes les colonnes. Toutefois, il est recommandé de spécifier uniquement les colonnes nécessaires pour améliorer les performances et la lisibilité.
+  </DocNote>
+
+  ```js showLineNumbers
+  const data = database.select("users", [
+    "username",
+    "email"
+  ], {
+    "id[>]": 100
+  });
+
+  // Exemple de résultat :
+  // [
+  //  {
+  //    username: "foo",
+  //    email: "foo@bar.com"
+  //  },
+  //  {
+  //    username: "cat",
+  //    email: "cat@dog.com"
+  //  }
+  // ]
+
+  for (const { username, email } of data) {
+      console.log(`User: ${username} - Email: ${email}`);
+  }
+
+  // Sélectionner toutes les colonnes.
+  data = database.select("users", "*");
+
+  // Sélectionner une seule colonne.
+  data = database.select("users", "username");
+
+  // Exemple de résultat :
+  // ["joh", "doe"]
+  ```
+
+  ## Jointures entre tables
+
+  <DocIntro>
+    Les clauses SQL JOIN combinent des lignes provenant de plusieurs tables. MedooJS fournit une syntaxe simple pour construire des clauses JOIN.
+  </DocIntro>
+
+  <div className="list">
+    * `>` - LEFT JOIN
+    * `<` - RIGHT JOIN
+    * `<>` - FULL JOIN
+    * `><` - INNER JOIN
+  </div>
+
+  ```js showLineNumbers
+  database.select("posts", {
+    // Définit la relation entre la table principale et la table jointe.
+    "[>]users": { "author_id": "id" }
+  });
+  ```
+
+  <DocIntro>
+    La colonne `author_id` de la table `posts` est mise en correspondance avec la colonne `id` de la table `users`.
+  </DocIntro>
+
+  ```js showLineNumbers
+  "[>]users": { "author_id": "id" } // LEFT JOIN "users" ON "posts"."author_id" = "users"."id"
+  ```
+
+  <DocIntro>
+    Si les deux tables utilisent le même nom de colonne, tu peux utiliser la forme abrégée.
+  </DocIntro>
+
+  ```js showLineNumbers
+  "[>]users": "user_id" // LEFT JOIN "users" USING ("user_id")
+  ```
+</div>

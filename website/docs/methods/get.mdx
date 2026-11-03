@@ -1,0 +1,65 @@
+---
+title: API Get
+sidebar_label: get
+---
+
+import DocIntro from '../../src/components/DocsPage/Intro';
+import DocRet from '../../src/components/DocsPage/Ret';
+import DocSig from '../../src/components/DocsPage/Sig';
+import DocSummary from '../../src/components/DocsPage/Summary';
+
+<div className="doc-main">
+  # Get
+  <DocSummary summary="Obtém um único registo de uma tabela." />
+
+  <DocSig content="get(table, columns, where)" />
+
+  <DocSig content="get(table, join, columns, where)" />
+
+  ## Valor devolvido
+
+  <DocRet>
+    Um objeto que contém apenas as colunas do primeiro registo correspondente.
+  </DocRet>
+
+  ```js showLineNumbers
+  const email = database.get("users", "email", {
+    id: 1234
+  });
+
+  // Exemplo de resultado:
+  // "john@email.com"
+
+  const profile = database.get("users", [
+    "email",
+    "gender",
+    "location"
+  ], {
+    id: 1234
+  });
+
+  // Exemplo de resultado:
+  // {
+  //  email: "john@email.com",
+  //  gender: "male",
+  //  location: "usa"
+  // }
+
+  const data = database.get("post", {
+    "[>]users": { "author_id": "id" }
+  }, [
+    "post.content",
+    "users.name",
+    "users.location"
+  ], {
+    ORDER: "post.rate"
+  });
+
+  // Exemplo de resultado:
+  // {
+  //  content: "John was here.",
+  //  name: "john",
+  //  location: "usa"
+  // }
+  ```
+</div>

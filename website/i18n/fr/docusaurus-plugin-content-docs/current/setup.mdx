@@ -1,0 +1,154 @@
+---
+title: Premiers pas
+sidebar_label: Commencer
+---
+
+import ConsoleCode from '../../../../src/components/ConsoleCode';
+import DocIntro from '../../../../src/components/DocsPage/Intro';
+
+<div className="doc-main">
+  # Premiers pas
+
+  <DocIntro>
+    La prise en main de `medoo-js` est simple.
+  </DocIntro>
+
+  ## Prérequis
+  <section className="list">
+    * Node.js 20 ou version ultérieure installé
+    * Une base de données SQL telle que MySQL, MSSQL, SQLite ou un autre moteur pris en charge.
+    * Le pilote correspondant à la base de données installé dans le projet.
+    * Des connaissances de base en SQL.
+  </section>
+
+  ## Liste des pilotes de bases de données pour Node.js
+  <DocIntro>
+    La liste suivante indique quel pilote de base de données installer dans le projet en fonction du type de base de données et de la plateforme.
+  </DocIntro>
+
+  <section className="table">
+    | Nom | Pilote | Version | Observations |
+    |:-----|:------:|:-------:|:------------:|
+    | MariaDB | `mariadb` | *3.4.0* | Pilote officiel de MariaDB. Dans de nombreux cas, il est également compatible avec MySQL. |
+    | MSSQL | `mssql` | *9.0.0* | Bibliothèque la plus populaire pour ce moteur. |
+    | MySQL | `mysql2` | *3.0.0* | Le plus recommandé actuellement. Compatible avec les Promises et plus performant que `mysql`. |
+    | Oracle | `oracledb` | *6.0.0* | Pilote officiel du moteur. |
+    | PostgreSQL | `pg` | *8.0.0* | Pilote officiel/de fait pour ce moteur. |
+    | SQLite | `better-sqlite3` | *11.0.0* | Pilote rapide et synchrone ; |
+  </section>
+
+  ### Installation du paquet du pilote
+  <DocIntro>
+    Pour l'installer, il suffit d'exécuter la commande `npm install [driver]` dans le terminal, à la racine du projet.
+    Par exemple :
+  </DocIntro>
+
+  <ConsoleCode text="$ npm install mysql2" />
+
+  ## Installation via NPM
+  <ConsoleCode text="$ npm install @horayzen-developers/medoo-js" />
+
+  ## Configuration du pool de connexions du pilote
+  <DocIntro>
+    Tous les pilotes nécessitent un tableau de configuration pour initialiser et créer le pool de connexions utilisé par `medoo-js` pour communiquer avec la base de données.
+  </DocIntro>
+
+  ### Pour MySQL
+  ```js showLineNumbers
+  import mysql from 'mysql2/promise';
+
+  const pool = mysql.createPool({
+    host: 'localhost',
+    port: 3306, // Si elle n'est pas spécifiée, le pilote utilise ce port par défaut.
+    user: 'your_username',
+    password: 'your_password', // Si elle n'est pas spécifiée, cela signifie qu'il n'y a pas de mot de passe.
+    database: 'name',
+    connectionLimit: 10,
+  });
+  ```
+
+  ### Pour MariaDB
+  <DocIntro>
+    Pour `MariaDB`, la configuration du pilote permettant de créer un pool de connexions est la même que pour `MySQL` et, dans la plupart des cas, le pilote `mysql2` prend entièrement en charge ce moteur.
+    Toutefois, si tu souhaites utiliser le pilote officiel, il suffit d'écrire : `import mariadb from 'mariadb'`.
+  </DocIntro>
+
+  ### Pour MSSQL
+  ```js showLineNumbers
+  import { connectionPool } from 'mssql';
+
+  const connection = new connectionPool({
+    server: 'localhost',
+    port: '1433',
+    user: 'your_username',
+    password: 'your_password',
+    database: 'name',
+  });
+  const pool = await connection.connect();
+  ```
+
+  ### Pour Oracle
+  ```js showLineNumbers
+  import oracledb from "oracledb";
+
+  const pool = await oracledb.createPool({
+    user: 'your_username',
+    password: 'your_password',
+    connectString: 'your_connect_string',
+
+    poolMin: 1,
+    poolMax: 10,
+    poolIncrement: 1,
+  });
+  ```
+
+  ### Pour PostgreSQL
+  ```js showLineNumbers
+  import { Pool } from 'pg';
+
+  const pool = new Pool({
+    host: 'localhost',
+    port: 5432,
+    user: 'your_username',
+    password: 'your_password', // Si elle n'est pas spécifiée, cela signifie qu'il n'y a pas de mot de passe.
+    database: 'name',
+    max: 10,
+  });
+  ```
+
+  ### Pour SQLite
+  ```js showLineNumbers
+  import Database from 'better-sqlite3';
+
+  const pool = new Database('name.db'); // ou ':memory' pour une base de données en mémoire
+  ```
+
+  ## Initialisation de l'instance de la classe et configuration
+  <DocIntro>
+    Après avoir créé un pool de connexions à l'aide du pilote pris en charge par le moteur de ta base de données, tu peux initialiser la classe `MedooJS`.
+  </DocIntro>
+
+  ```js showLineNumbers
+  // Importe la classe Medoo.
+  import { Medoo } from '@horayzen-developers/medoo-js';
+
+  // ... création du pool de connexions selon la base de données
+
+  // Initialisation directe avec le type de ta base de données
+  const database = new Medoo({ type: 'your_database_engine', exec: pool });
+  ```
+  **Remarque :** Le paramètre `type` de l'objet `config` doit être en minuscules et correspondre au nom du moteur. _(Voir le tableau des pilotes ci-dessus)_
+
+  ## Mode test
+  <DocIntro>
+    Ce mode est utile pour les tests. Tu peux vérifier le SQL généré avec `result.query` ou les paramètres avec `result.params` pour les différents types de bases de données. Les requêtes sont générées, mais elles ne sont pas exécutées.
+  </DocIntro>
+
+  ```js showLineNumbers
+  const database = new Medoo({ type: 'mysql', testMode: true });
+
+  const result = database.select('users', 'id', { 'name[~]': 'Marie' });
+
+  console.log(result.query) // ou également `result.params`
+  ```
+</div>

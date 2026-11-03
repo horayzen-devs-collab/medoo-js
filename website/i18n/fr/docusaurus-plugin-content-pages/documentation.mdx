@@ -1,0 +1,57 @@
+---
+title: Documentation
+---
+
+import DocList, { ListItem } from '../../../src/components/DocsPage/List';
+import DocSummary from '../../../src/components/DocsPage/Summary';
+
+<div className="doc-main">
+	# Documentation
+
+	## Premiers pas
+	<DocSummary>
+		Commencez ici pour installer `medoo-js` et créer une connexion à une base de données en quelques minutes.
+	</DocSummary>
+
+	<DocList>
+		<ListItem title="Configuration" link="/medoo-js/en/api/setup">
+			Installez `medoo-js` et créez une connexion à une base de données.
+		</ListItem>
+	</DocList>
+	<br/>
+
+	## L'argument `where`
+	<DocSummary>
+		Ce guide explique l'argument `where`, utilisé par de nombreuses méthodes pour filtrer les données. Comprendre son fonctionnement est essentiel pour récupérer des données spécifiques.
+	</DocSummary>
+
+	<DocList>
+		<ListItem title="Where" link="/medoo-js/en/api/syntax/where">
+			Documentation de référence pour l'argument `where`.
+		</ListItem>
+	</DocList>
+	<br/>
+
+	## Toutes les références de la documentation
+	<DocSummary>
+		Parcourez l'ensemble de la documentation pour consulter d'autres références.
+	</DocSummary>
+
+	<DocList>
+		<ListItem title="Select" link="/medoo-js/en/api/methods/select">
+			Récupérer des données d'une table.
+		</ListItem>
+		<ListItem title="Get" link="/medoo-js/en/api/methods/get">
+			Récupérer un seul enregistrement d'une table.
+		</ListItem>
+		<ListItem title="Insert" link="/medoo-js/en/api/methods/insert">
+			Insérer un ou plusieurs enregistrements dans une table.
+		</ListItem>
+		<ListItem title="Update" link="/medoo-js/en/api/methods/update">
+			Mettre à jour des enregistrements dans une table.
+		</ListItem>
+		<ListItem title="Delete" link="/medoo-js/en/api/methods/delete">
+			Supprimer des enregistrements d'une table.
+		</ListItem>
+	</DocList>
+</div>

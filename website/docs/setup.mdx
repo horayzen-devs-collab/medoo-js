@@ -1,0 +1,154 @@
+---
+title: Primeiros Passos
+sidebar_label: Começar
+---
+
+import ConsoleCode from '../src/components/ConsoleCode';
+import DocIntro from '../src/components/DocsPage/Intro';
+
+<div className="doc-main">
+  # Primeiros Passos
+
+  <DocIntro>
+    Começar a utilizar o `medoo-js` é simples.
+  </DocIntro>
+
+  ## Requisitos
+  <section className="list">
+    * Node.js 20 ou superior instalado
+    * Uma base de dados SQL, como MySQL, MSSQL, SQLite ou outro motor compatível.
+    * O controlador correspondente à base de dados instalado no projeto.
+    * Conhecimentos básicos de SQL.
+  </section>
+
+  ## Lista de controladores de bases de dados para Node.js
+  <DocIntro>
+    A lista seguinte mostra qual o controlador de base de dados a instalar no projeto, de acordo com o tipo de base de dados e a plataforma.
+  </DocIntro>
+
+  <section className="table">
+    | Nome | Controlador | Versão Mínima | Observações |
+    |:-----|:------:|:-------:|:------------:|
+    | MariaDB | `mariadb` | *3.4.0* | Controlador oficial do MariaDB. Em muitos casos, também é compatível com MySQL. |
+    | MSSQL | `mssql` | *9.0.0* | Biblioteca mais popular para este motor. |
+    | MySQL | `mysql2` | *3.0.0* | O mais recomendado atualmente. Compatível com Promises e com melhor desempenho do que `mysql`. |
+    | Oracle | `oracledb` | *6.0.0* | Controlador oficial do motor. |
+    | PostgreSQL | `pg` | *8.0.0* | Controlador oficial/de facto para o motor. |
+    | SQLite | `better-sqlite3` | *11.0.0* | Controlador rápido e síncrono; |
+  </section>
+
+  ### Instalação do pacote do controlador
+  <DocIntro>
+    Para instalar, basta executar o comando `npm install [driver]` no terminal, no diretório raiz do projeto.
+    Por exemplo:
+  </DocIntro>
+
+  <ConsoleCode text="$ npm install mysql2" />
+
+  ## Instalação através do NPM
+  <ConsoleCode text="$ npm install @horayzen-developers/medoo-js" />
+
+  ## Configuração do conjunto de ligações do controlador
+  <DocIntro>
+    Todos os controladores necessitam de um array de configuração para inicializar e criar o conjunto de ligações que o `medoo-js` utiliza para comunicar com a base de dados.
+  </DocIntro>
+
+  ### Para MySQL
+  ```js showLineNumbers
+  import mysql from 'mysql2/promise';
+
+  const pool = mysql.createPool({
+    host: 'localhost',
+    port: 3306, // Se não for especificada, o controlador utiliza esta porta predefinida.
+    user: 'seu_usuario',
+    password: 'sua_palavra_passe', // Se não for especificada, significa que não existe palavra-passe.
+    database: 'nome',
+    connectionLimit: 10,
+  });
+  ```
+
+  ### Para MariaDB
+  <DocIntro>
+    Para `MariaDB`, a configuração do controlador para criar um conjunto de ligações é a mesma que para `MySQL` e, na maioria dos casos, o controlador `mysql2` oferece suporte completo para este motor.
+    No entanto, se quiseres utilizar o controlador oficial, basta fazer: `import mariadb from 'mariadb'`.
+  </DocIntro>
+
+  ### Para MSSQL
+  ```js showLineNumbers
+  import { connectionPool } from 'mssql';
+
+  const connection = new connectionPool({
+    server: 'localhost',
+    port: '1433',
+    user: 'seu_usuario',
+    password: 'sua_palavra_passe',
+    database: 'nome',
+  });
+  const pool = await connection.connect();
+  ```
+
+  ### Para Oracle
+  ```js showLineNumbers
+  import oracledb from "oracledb";
+
+  const pool = await oracledb.createPool({
+    user: 'seu_usuario',
+    password: 'sua_palavra_passe',
+    connectString: 'sua_string_de_ligacao',
+
+    poolMin: 1,
+    poolMax: 10,
+    poolIncrement: 1,
+  });
+  ```
+
+  ### Para PostgreSQL
+  ```js showLineNumbers
+  import { Pool } from 'pg';
+
+  const pool = new Pool({
+    host: 'localhost',
+    port: 5432,
+    user: 'seu_usuario',
+    password: 'sua_palavra_passe', // Se não for especificada, significa que não existe palavra-passe.
+    database: 'nome',
+    max: 10,
+  });
+  ```
+
+  ### Para SQLite
+  ```js showLineNumbers
+  import Database from 'better-sqlite3';
+
+  const pool = new Database('nome.db'); // ou ':memory' para uma base de dados em memória
+  ```
+
+  ## Inicialização da instância da classe e configuração
+  <DocIntro>
+    Depois de criares um conjunto de ligações utilizando o controlador suportado pelo motor da tua base de dados, podes inicializar a classe `MedooJS`.
+  </DocIntro>
+
+  ```js showLineNumbers
+  // Importa a classe Medoo.
+  import { Medoo } from '@horayzen-developers/medoo-js';
+
+  // ... criação do conjunto de ligações de acordo com a base de dados
+
+  // Inicialização direta com o tipo da tua base de dados
+  const database = new Medoo({ type: 'seu_motor_de_base_de_dados', exec: pool });
+  ```
+  **Nota:** O parâmetro `type` do objeto `config` deve estar em minúsculas, de acordo com o nome do motor. _(Consulta a tabela de controladores acima)_
+
+  ## Modo de teste
+  <DocIntro>
+    Este modo é útil para testes. Podes verificar o SQL gerado através de `result.query` ou os parâmetros através de `result.params` nos diferentes tipos de base de dados. As consultas são geradas, mas não são executadas.
+  </DocIntro>
+
+  ```js showLineNumbers
+  const database = new Medoo({ type: 'mysql', testMode: true });
+
+  const result = database.select('users', 'id', { 'nome[~]': 'Marie' });
+
+  console.log(result.query) // ou também `result.params`
+  ```
+</div>

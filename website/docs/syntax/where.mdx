@@ -1,0 +1,291 @@
+---
+title: Sintaxe WHERE
+sidebar_label: where
+---
+
+import DocIntro from '../../src/components/DocsPage/Intro';
+
+<div className="doc-main">
+  # Sintaxe WHERE
+
+  <DocIntro>
+    Alguns métodos do MedooJS aceitam um argumento `where` para filtrar registos, de forma semelhante à cláusula WHERE do SQL. Embora as condições SQL possam tornar-se complexas e apresentar riscos de injeção SQL quando escritas manualmente, o MedooJS disponibiliza uma forma estruturada e expressiva de construir cláusulas WHERE de forma segura.
+  </DocIntro>
+
+  ## Condições básicas
+
+  <DocIntro>
+    As condições básicas são simples de utilizar. Também podes acrescentar operadores ao nome de uma coluna para criar comparações mais avançadas, especialmente para valores numéricos.
+  </DocIntro>
+
+  ```js showLineNumbers
+  database.select('users', 'username', {
+    email: 'john@doe.com'
+  });
+  // WHERE email = 'john@doe.com'
+
+  database.select('users', 'username', {
+    id: 200
+  });
+  // WHERE id = 200
+
+  database.select('users', 'username', {
+    'id[>]': 200
+  });
+  // WHERE id > 200
+
+  database.select('users', 'username', {
+    'id[>=]': 200
+  });
+  // WHERE id >= 200
+
+  database.select('users', 'username', {
+    'id[!]': 200
+  });
+  // WHERE id != 200
+
+  database.select('users', 'username', {
+    'age[<>]': [200, 500]
+  });
+  // WHERE age BETWEEN 200 AND 500
+
+  database.select('users', 'username', {
+    'age[><]': [200, 500]
+  });
+  // WHERE age NOT BETWEEN 200 AND 500
+  ```
+
+  <DocIntro>
+      Os operadores `<>` e `><` também podem ser utilizados com valores de data e hora.
+  </DocIntro>
+
+  ```js showLineNumbers
+  database.select('users', 'username', {
+    'created_at[<>]': [new Date(2024, 0, 1).toISOString().split('T'), new Date().toISOString().split('T')]
+  });
+  // WHERE ("created_at" BETWEEN '2024-01-01' AND '2026-01-01')
+
+  database.select('users', 'username', {
+    'created_at[><]': [new Date(2024, 0, 1).toISOString().split('T'), new Date().toISOString().split('T')]
+  });
+  // WHERE ("created_at" NOT BETWEEN '2024-01-01' AND '2026-01-01')
+  ```
+
+  <DocIntro>
+      Podes passar não só um único valor de texto ou numérico, mas também um array. Nesse caso, o Medoo gera uma condição IN.
+  </DocIntro>
+
+  ```js showLineNumbers
+  database.select('users', 'username', {
+    OR: {
+      id: [3, 616, 217, 56],
+      email: ['john@doe.com', 'lion@king.com', 'master@medoo.js']
+    }
+  });
+  // WHERE id IN (3, 616, 217, 56) OR email IN ('john@doe.com','lion@king.com','master@medoo.js')
+  ```
+
+  ## Condições negativas
+
+  <DocIntro>
+      Utiliza o operador `!` para construir comparações negativas, como !=, NOT IN e IS NOT NULL.
+  </DocIntro>
+
+  ```js showLineNumbers
+  database.select('users', 'user_name', {
+    'username[!]': 'john',
+    'id[!]': 616,
+    'email[!]': ['john@doe.com', 'lion@king.com', 'master@medoo.js'],
+    'city[!]': null,
+    'promoted[!]': true
+  });
+  // WHERE
+  // username != 'john' AND
+  // id != 616 AND
+  // email NOT IN ('john@doe.com', 'lion@king.com', 'master@medoo.js') AND
+  // city IS NOT NULL AND
+  // promoted != 1
+  ```
+
+  <DocIntro>
+      Também podes utilizar o resultado dos métodos `select` ou `get` como valor de uma condição.
+  </DocIntro>
+
+  ```js showLineNumbers
+  database.select('users', 'username', {
+    id: database.select('post', 'user_id', {
+      'comments[>]': 60
+    })
+  });
+  // WHERE id IN (3, 56, 132, 4133)
+  ```
+
+  ## Condições lógicas
+
+  <DocIntro>
+    As condições lógicas descrevem relações entre várias expressões. Utiliza `AND`/`OR` para construir consultas mais complexas.
+  </DocIntro>
+
+  ### Utilização básica
+
+  ```js showLineNumbers
+  // O MedooJS combina as condições com `AND` por predefinição.
+  database.select('users', 'username', {
+    'id[>]': 150,
+    'age[<>]': [18, 25],
+    gender: 'male'
+  });
+  // WHERE id > 150 AND age BETWEEN 18 AND 25 AND gender = 'male'
+
+  database.select('users', 'username', {
+    OR: {
+      'user_id[<]': 150,
+      'age[<>]': [18, 25],
+      gender: 'female'
+    }
+  });
+  // WHERE user_id < 150 OR age BETWEEN 18 AND 25 OR gender = 'female'
+  ```
+
+  ### Condições aninhadas
+
+  ```js showLineNumbers
+  database.select('users', '*', {
+    AND: {
+      OR: {
+        username: 'john',
+        email: 'john@doe.com'
+      },
+      password: 'adbcde'
+    }
+  });
+  // WHERE (username = 'john' OR email = 'john@doe.com') AND password = 'adbcde'
+  ```
+
+  ## Condições LIKE
+  <DocIntro>
+      Utiliza o operador `~` para construir condições `LIKE`. Pode ser utilizado tanto em condições básicas como em condições lógicas.
+  </DocIntro>
+
+  ```js showLineNumbers
+  database.select('users', 'id', {
+    'hobby[~]': '%ball'
+  });
+  // WHERE hobby LIKE '%ball'
+  ```
+
+  ### Correspondência de grupos
+
+  ```js showLineNumbers
+  database.select('users', 'id', {
+    'hobby[~]': ['%ball', '%ing', 'ball%']
+  });
+  // WHERE hobby LIKE '%ball' OR hobby LIKE '%ing' OR hobby LIKE 'ball%'
+  ```
+
+  ### Condições LIKE negativas
+
+  ```js showLineNumbers
+  database.select('users', 'id', {
+    'hobby[!~]': '%ball'
+  });
+  // WHERE hobby NOT LIKE '%ball'
+  ```
+
+  ### Condições LIKE compostas
+
+  ```js showLineNumbers
+  // O MedooJS combina as condições `LIKE` com `OR` por predefinição.
+  // A consulta seguinte mostra como combinar condições com `AND`. 
+  database.select('users', 'id', {
+    'hobby[~]': { AND: ['%ball', '%o%'] }
+  });
+  // WHERE hobby LIKE '%ball' AND hobby LIKE '%o%'
+  ```
+
+  ### Caracteres universais SQL
+
+  <DocIntro>
+      Podes utilizar os padrões de caracteres universais do SQL para correspondências mais avançadas.
+  </DocIntro>
+
+  ```js showLineNumbers
+  database.select('users', 'id', {
+    'city[~]': '%stan' // Kazakhstan, Uzbekistan, Turkmenistan, ...
+  });
+
+  database.select('users', 'id', {
+    'city[~]': 'Londo_' // London, Londox, Londos, ...
+  });
+  ```
+
+  ## Condições de ordenação
+
+  <DocIntro>
+      Utiliza `ORDER` para ordenar o conjunto de resultados.
+  </DocIntro>
+
+  ```js showLineNumbers
+  // Ordenar por uma única coluna.
+  database.select('users', 'id', {
+    ORDER: 'id'
+  });
+
+  // Ordenar por várias colunas utilizando a direção predefinida.
+  database.select('users', 'id', {
+    ORDER: ['id', 'username']
+  });
+
+  // Ordenar por várias colunas.
+  database.select('users', 'id', {
+    ORDER: {
+      // Ordenar uma coluna segundo uma ordem personalizada.
+      id: [34, 21, 75, 89, 414, 3],
+
+      // Ordenação descendente.
+      username: 'DESC',
+
+      // Ordenação ascendente.
+      email: 'ASC'
+    }
+  });
+  ```
+
+  ## Expressões regulares
+
+  <DocIntro>
+      Utiliza o operador `REGEXP` para comparar valores com uma expressão regular.
+  </DocIntro>
+
+  ```js showLineNumbers
+  database.select('users', '*', {
+    'username[REGEXP]': '[a-z0-9]*',
+    'email[!REGEXP]': '[0-9]*'
+  });
+  // WHERE username REGEXP '[a-z0-9]*' AND email NOT REGEXP '[0-9]*'
+  ```
+
+  ## LIMIT e OFFSET
+
+  <DocIntro>
+      Utiliza `LIMIT` para limitar o número de registos devolvidos. Também podes especificar um `OFFSET`.
+  </DocIntro>
+
+  ```js showLineNumbers
+  // Devolver os primeiros 50 registos.
+  database.select('users', 'id', {
+    LIMIT: 50
+  });
+
+  // Ignorar os primeiros 15 registos e devolver os 50 seguintes.
+  database.select('users', 'id', {
+    LIMIT: [15, 50]
+  });
+
+  // Para `Oracle` e `MSSQL`, também é necessário um `ORDER`.
+  database.select('users', 'id', {
+    LIMIT: [15, 50],
+    ORDER: 'created_at'
+  });
+  ```
+</div>

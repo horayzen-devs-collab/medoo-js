@@ -1,0 +1,78 @@
+---
+title: API Insert
+sidebar_label: insert
+---
+
+import DocIntro from '../../../../../src/components/DocsPage/Intro';
+import DocParams, { ParamsItem } from '../../../../../src/components/DocsPage/Params';
+import DocSig from '../../../../../src/components/DocsPage/Sig';
+import DocSummary from '../../../../../src/components/DocsPage/Summary';
+
+<div className="doc-main">
+  # Insert
+  <DocSummary summary="Insère un ou plusieurs enregistrements dans une table." />
+
+  <DocSig content="insert(table, values)" />
+
+  <DocParams>
+    <ParamsItem title="table [string]">
+      Le nom de la table.
+    </ParamsItem>
+
+    <ParamsItem title="values [object]">
+      Les données à insérer.
+    </ParamsItem>
+  </DocParams>
+
+  ## ID du dernier enregistrement inséré
+
+  <DocIntro>
+    Pour obtenir l'ID de l'enregistrement inséré, appelle `id()` sur la valeur renvoyée par `insert`.
+  </DocIntro>
+
+  ```js showLineNumbers
+  const returning = database.insert("users", {
+    name: "john",
+    email: "john@email.com",
+    age: 26
+  });
+
+  const id = returning.id();
+  ```
+
+  <DocIntro>
+    Pour MSSQL, Oracle et PostgreSQL, indique la clé primaire comme troisième paramètre lors de l'appel de la méthode `insert`.
+  </DocIntro>
+
+  ```js showLineNumbers
+  const returning = database.insert("users", {
+    name: "john",
+    location: "usa"
+  }, "id");
+
+  const id = returning.id();
+  ```
+
+  ## Insertion multiple
+
+  <DocIntro>
+    Tu peux également insérer plusieurs lignes en un seul appel.
+  </DocIntro>
+
+  ```js showLineNumbers
+  database.insert("users", [
+    {
+      name: "john",
+      email: "john@email.com",
+      age: 26,
+      location: "usa"
+    },
+    {
+      name: "doe",
+      email: "doe@email.com",
+      age: 35,
+      location: "china"
+    }
+  ]);
+  ```
+</div>

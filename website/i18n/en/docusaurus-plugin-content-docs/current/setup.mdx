@@ -1,0 +1,153 @@
+---
+title: Setup
+---
+
+import ConsoleCode from '../../../../src/components/ConsoleCode';
+import DocIntro from '../../../../src/components/DocsPage/Intro';
+
+<div className="doc-main">
+  # Getting Started
+
+  <DocIntro>
+    Get started with `medoo-js` is straightforward.
+  </DocIntro>
+  
+  ## Requeriments
+  <section className="list">
+    * Node.js 20+ installed
+    * A SQL database such as MySQL, MSSQL, SQLite, or another supported engine.
+    * A corresponding driver for the database installed on the project.
+    * Basic SQL knowledge.
+  </section>
+
+  ## Node.js Database Drivers List
+  <DocIntro>
+    The following list shows which database driver to install on your project based on your database type and platform.
+  </DocIntro>
+
+  <section className="table">
+    | Name | Driver | Minium Version | Observations |
+    |:-----|:------:|:-------:|:------------:|
+    | MariaDB | `mariadb` | *3.4.0* | The official driver for MariaDB. In most cases compatible with MySQL also. |
+    | MSSQL | `mssql` | *9.0.0* | Most popular library for the engine. |
+    | MySQL | `mysql2` | *3.0.0* | The most recommended currently. Compatible with Promises and better performance than `mysql`. |
+    | Oracle | `oracledb` | *6.0.0* | The official driver for the engine. |
+    | PostgreSQL | `pg` | *8.0.0* | Official driver/in fact for the engine. |
+    | SQLite | `better-sqlite3` | *11.0.0* | A fast and asynchronous driver. |
+  </section>
+
+  ### Driver Package Installation
+  <DocIntro>
+    For installation just run the command `npm install [driver]` in terminal on the root directory of the project.
+    For example:
+  </DocIntro>
+
+  <ConsoleCode text="$ npm install mysql2" />
+
+  ## NPM Installation
+  <ConsoleCode text="$ npm install @horayzen-developers/medoo-js" />
+
+  ## Configuration of the Driver Connection Pool
+  <DocIntro>
+    All drivers need a configuration array to initialize and create the pool wich `medoo-js` use for comunicate with the database.
+  </DocIntro>
+
+  ### For MySQL
+  ```js showLineNumbers
+  import mysql from 'mysql2/promise';
+
+  const pool = mysql.createPool({
+    host: 'localhost',
+    port: 3306, // if not specified the driver use exactly this port wich is the default
+    user: 'your_username',
+    password: 'your_password', // if not specified means no password
+    database: 'name',
+    connectionLimit: 10,
+  });
+  ```
+
+  ### For MariaDB
+  <DocIntro>
+    For `MariaDB` the driver configuration for creating a pool, is the same as `MySQL`, and in the most cases the `mysql2` driver have full suport for the engine.
+    But, if want to use the oficial driver just: `import mariadb from 'mariadb'`.
+  </DocIntro>
+
+  ### For MSSQL
+  ```js showLineNumbers
+  import { ConnectionPool } from 'mssql';
+
+  const connection = new ConnectionPool({
+    server: 'localhost',
+    port: '1433',
+    user: 'your_username',
+    password: 'your_password',
+    database: 'name',
+  });
+  const pool = await connection.connect();
+  ```
+
+  ### For Oracle
+  ```js showLineNumbers
+  import oracledb from "oracledb";
+
+  const pool = await oracledb.createPool({
+    user: 'your_username',
+    password: 'your_password',
+    connectString: 'your_connect_string',
+
+    poolMin: 1,
+    poolMax: 10,
+    poolIncrement: 1,
+  });
+  ```
+
+  ### For PostgreSQL
+  ```js showLineNumbers
+  import { Pool } from 'pg';
+
+  const pool = new Pool({
+    host: 'localhost',
+    port: 5432,
+    user: 'your_username',
+    password: 'your_password', // if not specified means no password
+    database: 'name',
+    max: 10,
+  });
+  ```
+
+  ### For SQLite
+  ```js showLineNumbers
+  import Database from 'better-sqlite3';
+
+  const pool = new Database('name.db'); // or ':memory' for a database in memory
+  ```
+
+  ## Initialization of the Class Instance and Configuration
+  <DocIntro>
+    After create a pool connection using the supported driver for your databse engine, you can inicialize the `MedooJS` class.
+  </DocIntro>
+
+  ```js showLineNumbers
+  // Import the Medoo Class.
+  import { Medoo } from '@horayzen-developers/medoo-js';
+
+  // ...pool creation proccess according to your database
+
+  // Direct initialization with your database type
+  const database = new Medoo({ type: 'your_database_engine', exec: pool });
+  ```
+  **Note:** The `type` param of the `config` object, should be lowercase accordig to the engine name. _(see it above on the drivers list table)_
+
+  ## Test Mode
+  <DocIntro>
+    This mode is useful for tests. You can verify generated SQL through `result.query` or the parameters `result.params` across different database types. Queries are generated but not executed.
+  </DocIntro>
+
+  ```js showLineNumbers
+  const database = new Medoo({ type: 'mysql', testMode: true });
+
+  const result = database.select('users', 'id', { 'name[~]': 'Marie' });
+
+  console.log(result.query) // or also `result.params`
+  ```
+</div>

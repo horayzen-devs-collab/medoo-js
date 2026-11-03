@@ -1,0 +1,57 @@
+---
+title: Documentation
+---
+
+import DocList, { ListItem } from '../../../src/components/DocsPage/List';
+import DocSummary from '../../../src/components/DocsPage/Summary';
+
+<div className="doc-main">
+	# Documentation
+
+	## First Steps
+	<DocSummary>
+		Start here to install `medoo-js` and create a database connection in just some minutes.
+	</DocSummary>
+
+	<DocList>
+		<ListItem title="Setup" link="/medoo-js/en/api/setup">
+			Install `medoo-js` and create a database connection.
+		</ListItem>
+	</DocList>
+	<br/>
+
+	## The `where` Argument
+	<DocSummary>
+		This guide explains the `where` argumente, wich many methods use for filtering. Understanding it is essential for retrieving specific data.
+	</DocSummary>
+
+	<DocList>
+		<ListItem title="Where" link="/medoo-js/en/api/syntax/where">
+			Reference documentation for the `where` argument.
+		</ListItem>
+	</DocList>
+	<br/>
+
+	## All Documentation References
+	<DocSummary>
+		Browse the full Documentation for more references.
+	</DocSummary>
+
+	<DocList>
+		<ListItem title="Select" link="/medoo-js/en/api/methods/select">
+			Retrive data from a table.
+		</ListItem>
+		<ListItem title="Get" link="/medoo-js/en/api/methods/get">
+			Retrive a single record from a table.
+		</ListItem>
+		<ListItem title="Insert" link="/medoo-js/en/api/methods/insert">
+			Insert one or more records into a table.
+		</ListItem>
+		<ListItem title="Update" link="/medoo-js/en/api/methods/update">
+			Update records in a table.
+		</ListItem>
+		<ListItem title="Delete" link="/medoo-js/en/api/methods/delete">
+			Delete records from a table.
+		</ListItem>
+	</DocList>
+</div>

@@ -1,0 +1,47 @@
+---
+title: Update API
+sidebar_label: update
+---
+
+import DocIntro from '../../../../../src/components/DocsPage/Intro';
+import DocParams, { ParamsItem } from '../../../../../src/components/DocsPage/Params';
+import DocSig from '../../../../../src/components/DocsPage/Sig';
+import DocSummary from '../../../../../src/components/DocsPage/Summary';
+
+<div className="doc-main">
+  # Update
+  <DocSummary summary="Update records in a table." />
+  
+  <DocSig content="update(table, data, where)" />
+
+  <DocParams>
+    <ParamsItem title="table [string]">
+      The name of the table.
+    </ParamsItem>
+
+    <ParamsItem title="data [object]">
+      The column-value entries to update.
+    </ParamsItem>
+
+    <ParamsItem title="where [object] (optional)">
+      The WHERE clause used to filter the records to be updated.
+    </ParamsItem>
+  </DocParams>
+
+  ## Affected Rows Count
+
+  <DocIntro>
+    To get the affected rows count, call `rowCount()` on the `update` returned value.
+  </DocIntro>
+
+  ```js showLineNumbers
+  const result = database.update("users", {
+    age: 1
+  }, {
+    "id[>]": 100
+  });
+ 
+// Returns the number of rows affected by the last SQL statement.
+const rowCount = result.rowCount();
+  ```
+</div>

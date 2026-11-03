@@ -1,0 +1,103 @@
+---
+title: Select API
+sidebar_label: select
+---
+
+import DocIntro from '../../../../../src/components/DocsPage/Intro';
+import DocNote from '../../../../../src/components/DocsPage/Note';
+import DocRet from '../../../../../src/components/DocsPage/Ret';
+import DocSig from '../../../../../src/components/DocsPage/Sig';
+import DocSummary from '../../../../../src/components/DocsPage/Summary';
+
+<div className="doc-main">
+  # Select
+  <DocSummary summary="Retrieve data from a table." />
+  
+  ## Usage
+
+  <DocSig content="select(table, columns)" />
+  
+  <DocSig content="select(table, columns, where)" />
+  
+  <DocSig content="select(table, join, columns, where)" />
+
+  ## Return Value
+
+  <DocRet>
+    *`array[]`* An array containing the retrieved rows.
+  </DocRet>
+
+  <DocNote>
+    You can use `*` for the columns parameter to retrieve all columns. However, explicitly specifying only the required columns is recommended for better performance and readability.
+  </DocNote>
+
+  ```js showLineNumbers
+  const data = database.select("users", [
+    "username",
+    "email"
+  ], {
+    "id[>]": 100
+  });
+   
+  // Example result:
+  // [
+  //  {
+  //    username: "foo",
+  //    email: "foo@bar.com"
+  //  },
+  //  {
+  //    username: "cat",
+  //    email: "cat@dog.com"
+  //  }
+  // ]
+   
+  for (const { username, email } of data) {
+      console.log(`User: ${username} - Email: ${email}`);
+  }
+   
+  // Select all columns.
+  data = database.select("users", "*");
+   
+  // Select a single column.
+  data = database.select("users", "username");
+   
+  // Example result:
+  // ["joh", "doe"]
+  ```
+
+  ## Table Joins
+
+  <DocIntro>
+    SQL JOIN clauses combine rows from multiple tables. MedooJS provides a simple syntax for building JOIN clauses.
+  </DocIntro>
+
+  <div className="list">
+    * `>` - LEFT JOIN
+    * `<` - RIGHT JOIN
+    * `<>` - FULL JOIN
+    * `><` - INNER JOIN
+  </div>
+
+  ```js showLineNumbers
+  database.select("posts", {
+    // Define the relationship between the main table and the joined table.
+    "[>]users": { "author_id": "id" }
+  });
+  ```
+
+  <DocIntro>
+    The column `author_id` in the `posts` table is matched to the column `id` in the `users` table.
+  </DocIntro>
+
+  ```js showLineNumbers
+  "[>]users": { "author_id": "id" } // LEFT JOIN "users" ON "posts"."author_id" = "users"."id"
+  ```
+
+  <DocIntro>
+    If both tables use the same column name, you can use the shorthand form.
+  </DocIntro>
+
+  ```js showLineNumbers
+  "[>]users": "user_id" // LEFT JOIN "users" USING ("user_id")
+  ```
+</div>

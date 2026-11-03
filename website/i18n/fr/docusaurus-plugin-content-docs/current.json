@@ -1,0 +1,18 @@
+{
+  "version.label": {
+    "message": "1.2.0",
+    "description": "The label for version current"
+  },
+  "sidebar.docsSidebar.category.Primeiros Passos": {
+    "message": "Premiers pas",
+    "description": "The label for category 'Primeiros Passos' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Sintaxe do WHERE": {
+    "message": "Syntaxe WHERE",
+    "description": "The label for category 'Sintaxe do WHERE' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Métodos": {
+    "message": "Méthodes",
+    "description": "The label for category 'Métodos' in sidebar 'docsSidebar'"
+  }
+}
