@@ -10,24 +10,24 @@ const BadgesList: BadgeItem[] = [
   {
     href: 'https://npmjs.com/package/@horayzen-developers/medoo-js',
     alt: 'Downloads',
-    badge: 'npm/dm/@',
+    badge: 'npm/dm/@horayzen-developers',
   },
   {
     href: 'https://npmjs.com/package/@horayzen-developers/medoo-js',
     alt: 'Latest Version',
-    badge: 'npm/v/@',
+    badge: 'npm/v/@horayzen-developers',
   },
   {
-    href: 'https://github.com/horayzen-developers/medoo-js',
+    href: 'https://github.com/horayzen-devs-collab/medoo-js',
     alt: 'License',
-    badge: 'github/license/',
+    badge: 'github/license/horayzen-devs-collab',
   },
 ];
 
 function Badge({href, alt, badge}: BadgeItem) {
   return (
     <a href={href} target="_blank">
-      <img alt={alt} src={`https://img.shields.io/${badge}horayzen-developers%2Fmedoo-js?style=for-the-badge`}/>
+      <img alt={alt} src={`https://img.shields.io/${badge}%2Fmedoo-js?style=for-the-badge`}/>
     </a>
   );
 }

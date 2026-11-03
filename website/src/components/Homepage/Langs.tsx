@@ -14,7 +14,7 @@ function LangsList({ locales, localeConfigs, defaultLocale, currentLocale }) {
   
   const langs: LangItem[] = locales.map(locale => {
     const {label} = localeConfigs[locale];
-    const href = siteConfig.baseUrl + ((locale === defaultLocale) ? '' : locale);
+    const href = '/medoo-js/' + ((locale === defaultLocale) ? '' : locale);
     const active = locale === currentLocale;
     const [id] = locale.split('-');
 

@@ -5,7 +5,7 @@ import { themes } from 'prism-react-renderer';
 const config: Config = {
   title: 'MedooJS',
   titleDelimiter: '-',
-  tagline: 'A lightweight database library with smart engine inference and robust SQL injection prevention',
+  tagline: 'A lightweight Node.js database library with smart engine inference and robust SQL injection prevention',
   favicon: 'img/favicon.ico',
 
   url: 'https://horayzen-devs-collab.github.io',
