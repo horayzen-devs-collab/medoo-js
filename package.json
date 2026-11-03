@@ -1,0 +1,34 @@
+{
+  "name": "@horayzen-developers/medoo-js",
+  "version": "1.2.0",
+  "description": "A lightweight Node.js database library with smart engine inference and robust SQL injection prevention.",
+  "main": "src/main.js",
+  "type": "module",
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node tests/security.test.js",
+    "example": "node examples/sandbox.js"
+  },
+  "keywords": [
+    "database",
+    "sql-injection",
+    "security",
+    "mysql",
+    "postgresql",
+    "sqlite"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "author": "HORAYZEN Developers®",
+  "license": "MIT",
+  "homepage": "https://horayzen-devs-collab.github.io/medoo-js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/horayzen-devs-collab/medoo-js.git"
+  }
+}
