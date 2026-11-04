@@ -327,7 +327,7 @@
     "description": "The title of the tag list page"
   },
   "home.pageTitle": {
-    "message": "{siteTitle} - Une bibliothèque de bases de données légère pour Node.js",
+    "message": "{title} - Une bibliothèque de bases de données légère pour Node.js",
     "description": "Homepage document title, including the website title."
   },
   "home.metaDescription": {

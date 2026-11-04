@@ -1,6 +1,7 @@
 import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Translate, { translate } from '@docusaurus/Translate';
+import Head from '@docusaurus/Head';
 import Layout from '@theme/Layout';
 
 import ConsoleCode from '../components/ConsoleCode';
@@ -12,23 +13,27 @@ import HomepageFeatures from '../components/Homepage/Features';
 import HomepageLangs from '../components/Homepage/Langs';
 
 export default function Home(): React.JSX.Element {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
+  const pageTitle = translate({
+    id: 'home.pageTitle',
+    message: '{title} - Uma biblioteca leve de bases de dados para Node.js',
+    description: 'Homepage document title, including the website title.',
+  }, {
+    title: siteConfig.title,
+  });
 
   return (
     <Layout
-      title={translate({
-        id: 'home.pageTitle',
-        message: '{siteTitle} - Uma biblioteca leve de bases de dados para Node.js',
-        description: 'Homepage document title, including the website title.',
-      }, {
-        siteTitle: siteConfig.title,
-      })}
       description={translate({
         id: 'home.metaDescription',
         message: 'Uma biblioteca leve de bases de dados para Node.js.',
         description: 'Homepage meta description used by search engines.',
       })}
     >
+      <Head>
+        <title>{pageTitle}</title>
+      </Head>
+      
       <main className="hero-main">
         <Logo
           props={{
@@ -58,11 +63,11 @@ export default function Home(): React.JSX.Element {
           >
             Versão:
           </Translate>{' '}
-          v1.2.0
+          v1.2.1
         </h5>
 
         <a
-          href="https://github.com/horayzen-developers/medoo-js"
+          href="https://github.com/horayzen-devs-collab/medoo-js"
           className="btn btn-github"
         >
           <Translate

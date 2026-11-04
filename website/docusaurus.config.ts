@@ -79,7 +79,7 @@ const config: Config = {
       links: [
         {
           label: 'Ver no GitHub',
-          href: 'https://github.com/horayzen-developers/medoo-js',
+          href: 'https://github.com/horayzen-devs-collab/medoo-js',
         },
       ],
       copyright: `Grupo HORAYZEN Developers®, Todos os direitos reservados, ${new Date().getFullYear()}`,
